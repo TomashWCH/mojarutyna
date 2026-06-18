@@ -338,7 +338,7 @@ input,textarea,select{font-family:'Nunito',sans-serif}
 .pet-coins{background:rgba(255,255,255,.25);border-radius:50px;padding:.15rem .55rem;font-size:.72rem;font-weight:800;backdrop-filter:blur(4px)}
 .coin-home{font-size:.82rem;font-weight:800;color:#B7860B}
 .room-coins{font-weight:800;color:#B7860B;margin-bottom:.5rem;font-size:.95rem}
-.pet-room{position:relative;border-radius:18px;height:230px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(0,0,0,.05);margin-bottom:.7rem}
+.pet-room{position:relative;border-radius:18px;height:280px;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(0,0,0,.05);margin-bottom:.7rem}
 .room-wall-items{position:absolute;top:10px;left:0;right:0;display:flex;justify-content:center;gap:.7rem;font-size:1.5rem;z-index:1}
 .room-pet-area{position:absolute;left:0;right:0;bottom:30px;display:flex;flex-direction:column;align-items:center;z-index:2}
 .room-worn{display:none}
@@ -1402,6 +1402,12 @@ const ROOMS = [
   { id:'room_piwnica', name:'Piwnica', emoji:'🔦', price:80 },
   { id:'room_poddasze', name:'Poddasze', emoji:'🪜', price:100 },
 ];
+const FUR_SIZE = {
+  fur_sofa: 6.4, fur_bed: 6.6, fur_tv: 4.8, fur_console: 3.6,
+  fur_chair: 4.2, fur_plant: 3.8, fur_books: 3.4, fur_teddy: 3.6, fur_lamp: 3.6,
+  fur_window: 4.4, fur_picture: 3.8, fur_trophy: 3.2, fur_clock: 3.0, fur_balloon: 3.8
+};
+function furSize(id) { return FUR_SIZE[id] || 2.6; }
 const DEFAULT_WALL = { room_salon:'wall_peach', room_sypialnia:'wall_lav', room_kuchnia:'wall_yellow', room_ogrod:'wall_green', room_garaz:'wall_gray', room_piwnica:'wall_gray', room_poddasze:'wall_mint' };
 const ROOM_DEFAULTS = {
   room_salon:    [{id:'fur_sofa',x:.30,y:.80},{id:'fur_tv',x:.70,y:.80},{id:'fur_picture',x:.50,y:.26},{id:'fur_plant',x:.88,y:.74}],
@@ -1574,7 +1580,7 @@ function renderRoom() {
     if (!it) return '';
     if (!room.pos[id]) room.pos[id] = defaultPosFor(it, idx);
     const p = room.pos[id];
-    return '<span class="room-item" data-id="' + id + '" style="left:' + (p.x * 100) + '%;top:' + (p.y * 100) + '%">' + it.emoji + '</span>';
+    return '<span class="room-item" data-id="' + id + '" style="left:' + (p.x * 100) + '%;top:' + (p.y * 100) + '%;font-size:' + furSize(id) + 'rem">' + it.emoji + '</span>';
   }).join('');
   const roomEl = document.getElementById('pet-room');
   Array.prototype.forEach.call(furn.querySelectorAll('.room-item'), function (el) {
