@@ -344,7 +344,7 @@ input,textarea,select{font-family:'Nunito',sans-serif}
 .room-worn{display:none}
 .room-pet{position:absolute;left:50%;top:78%;transform:translate(-50%,-50%);display:flex;align-items:flex-end;justify-content:center;gap:4px;line-height:1;cursor:grab;user-select:none;touch-action:none;z-index:3}
 .room-pet:active{cursor:grabbing}
-.room-pet svg{animation:petbob 3s ease-in-out infinite}
+.room-pet svg{animation:none}
 .room-hint{text-align:center;font-size:.72rem;color:var(--muted);margin:-.3rem 0 .6rem}
 .room-pet svg{filter:drop-shadow(0 5px 5px rgba(0,0,0,.18))}
 .room-floor-items{position:absolute;bottom:5px;left:0;right:0;display:flex;justify-content:center;align-items:flex-end;gap:.4rem;font-size:1.8rem;flex-wrap:wrap;z-index:1;padding:0 .4rem}
@@ -941,7 +941,12 @@ function _accGlasses(a) { if (a.eyeLX === a.eyeRX) return '<circle cx="' + a.eye
 function _accScarf(a) { var x = a.neckX, y = a.neckY; return '<path d="M' + (x - 22) + ' ' + (y - 2) + ' q22 16 44 0 l4 8 q-26 14 -52 0 z" fill="#E0524A"/><path d="M' + (x + 8) + ' ' + (y + 4) + ' l6 24 10 -2 -6 -24z" fill="#C8453E"/>'; }
 function _accFlower(a) { var x = a.sideX, y = a.sideY, p = ''; for (var k = 0; k < 5; k++) { var ang = k * 72 * Math.PI / 180; p += '<circle cx="' + (x + Math.cos(ang) * 7).toFixed(1) + '" cy="' + (y + Math.sin(ang) * 7).toFixed(1) + '" r="5" fill="#FF8FC8"/>'; } return p + '<circle cx="' + x + '" cy="' + y + '" r="4" fill="#FFD86B"/>'; }
 function _accStar(a) { var x = a.starX, y = a.starY; return '<path d="M' + x + ' ' + (y - 9) + ' l2.6 6 6.4 .6 -5 4.4 1.6 6.4 -5.6 -3.4 -5.6 3.4 1.6 -6.4 -5 -4.4 6.4 -.6 z" fill="#FFD86B"/>'; }
-const ACC_SVG = { acc_bow: _accBow, acc_cap: _accCap, acc_hat: _accHat, acc_grad: _accGrad, acc_crown: _accCrown, acc_glasses: _accGlasses, acc_scarf: _accScarf, acc_flower: _accFlower, acc_star: _accStar };
+function _accBeanie(a) { var x = a.hatX, y = a.hatY; return '<path d="M' + (x - 33) + ' ' + (y - 1) + ' q0 -42 33 -42 q33 0 33 42 z" fill="#E0524A"/><rect x="' + (x - 35) + '" y="' + (y - 6) + '" width="70" height="11" rx="5.5" fill="#B83C36"/><circle cx="' + x + '" cy="' + (y - 45) + '" r="8" fill="#FFE3CF"/>'; }
+function _accSunhat(a) { var x = a.hatX, y = a.hatY; return '<ellipse cx="' + x + '" cy="' + (y + 2) + '" rx="48" ry="12" fill="#E3C16B"/><path d="M' + (x - 22) + ' ' + (y + 2) + ' q0 -28 22 -28 q22 0 22 28 z" fill="#EBD08A"/><rect x="' + (x - 22) + '" y="' + (y - 9) + '" width="44" height="7" rx="3" fill="#FF8FAE"/>'; }
+function _accParty(a) { var x = a.hatX, y = a.hatY; return '<path d="M' + x + ' ' + (y - 50) + ' L' + (x - 17) + ' ' + (y + 1) + ' L' + (x + 17) + ' ' + (y + 1) + ' Z" fill="#5BC8F5"/><path d="M' + (x - 11) + ' ' + (y - 18) + ' l22 6 M' + (x - 6) + ' ' + (y - 34) + ' l14 5" stroke="#FFD42E" stroke-width="3" stroke-linecap="round"/><circle cx="' + x + '" cy="' + (y - 50) + '" r="6" fill="#FF6F91"/>'; }
+function _accHeadphones(a) { var x = a.hatX, ey = a.eyeY; return '<path d="M' + (x - 36) + ' ' + (ey + 2) + ' q' + 36 + ' -52 72 0" stroke="#3A3A44" stroke-width="7" fill="none" stroke-linecap="round"/><rect x="' + (x - 46) + '" y="' + (ey - 8) + '" width="15" height="26" rx="7" fill="#3A3A44"/><rect x="' + (x + 31) + '" y="' + (ey - 8) + '" width="15" height="26" rx="7" fill="#3A3A44"/>'; }
+function _accWreath(a) { var x = a.hatX, y = a.hatY + 2, p = '', cols = ['#FF8FC8', '#FFD42E', '#B98CFF', '#7FC8FF', '#FF6F91']; for (var k = 0; k <= 6; k++) { var ang = Math.PI - (k / 6) * Math.PI; var fx = x + Math.cos(ang) * 36, fy = y - Math.abs(Math.sin(ang)) * 30; p += '<circle cx="' + fx.toFixed(1) + '" cy="' + fy.toFixed(1) + '" r="6.5" fill="' + cols[k % cols.length] + '"/><circle cx="' + fx.toFixed(1) + '" cy="' + fy.toFixed(1) + '" r="2.4" fill="#fff"/>'; } return p; }
+const ACC_SVG = { acc_bow: _accBow, acc_cap: _accCap, acc_hat: _accHat, acc_grad: _accGrad, acc_crown: _accCrown, acc_glasses: _accGlasses, acc_scarf: _accScarf, acc_flower: _accFlower, acc_star: _accStar, acc_beanie: _accBeanie, acc_sunhat: _accSunhat, acc_party: _accParty, acc_headphones: _accHeadphones, acc_wreath: _accWreath };
 function petSVG(type, mood, worn, sizePx) {
   var body;
   if (type === 'unicorn') body = _unicorn(mood);
@@ -974,7 +979,11 @@ const FIREBASE_CONFIG = {
   messagingSenderId: "690971588126",
   appId: "1:690971588126:web:615949dc86fdc0125b200f"
 };
-let _db = null, syncCode = null, syncEnabled = false, applyingRemote = false, lastPushedT = '', syncRef = null;
+let _db = null, syncCode = null, syncEnabled = false, applyingRemote = false, syncRef = null;
+let _lastPushed = { shared: '', child: {} };
+let _lastSharedData = '', _lastChildData = {};
+function _tok() { return Date.now() + '_' + Math.floor(Math.random() * 1e6); }
+function _sharedBlob() { const o = {}; for (const k in S) { if (k !== 'cdata') o[k] = S[k]; } return JSON.stringify(o); }
 
 function initSync() {
   if (typeof firebase === 'undefined') return;
@@ -997,19 +1006,34 @@ function connectFamily(code, silent) {
   if (syncRef) { try { syncRef.off(); } catch (e) {} }
   syncCode = code;
   localStorage.setItem('eduq_family', code);
-  syncRef = _db.ref('families/' + code + '/state');
+  _lastPushed = { shared: '', child: {} };
+  _lastSharedData = ''; _lastChildData = {};
+  syncRef = _db.ref('families/' + code);
   syncRef.on('value', snap => {
     const remote = snap.val();
-    if (!remote) { pushState(true); return; }
-    if (remote._t === lastPushedT) return;
+    if (!remote || (!remote.shared && !remote.kids)) { pushState(true); return; }
+    let changed = false;
+    applyingRemote = true;
     try {
-      const parsed = JSON.parse(remote.data);
-      applyingRemote = true;
-      S = parsed;
-      localStorage.setItem('mr_v4', JSON.stringify(S));
-      refreshCurrentView();
-      applyingRemote = false;
-    } catch (e) { applyingRemote = false; }
+      if (remote.shared && remote.shared.data && remote.shared._t !== _lastPushed.shared && remote.shared.data !== _lastSharedData) {
+        const parsed = JSON.parse(remote.shared.data);
+        const keep = S.cdata;
+        S = parsed; S.cdata = keep || [];
+        _lastSharedData = remote.shared.data; changed = true;
+      }
+      if (remote.kids) {
+        for (const k in remote.kids) {
+          const i = +k, node = remote.kids[k];
+          if (node && node.data && node._t !== _lastPushed.child[i] && node.data !== _lastChildData[i]) {
+            if (!S.cdata) S.cdata = [];
+            S.cdata[i] = JSON.parse(node.data);
+            _lastChildData[i] = node.data; changed = true;
+          }
+        }
+      }
+      if (changed) { localStorage.setItem('mr_v4', JSON.stringify(S)); refreshCurrentView(); }
+    } catch (e) {}
+    applyingRemote = false;
   }, () => { syncEnabled = false; renderSync(); });
   syncEnabled = true;
   renderSync();
@@ -1019,8 +1043,21 @@ function pushState(force) {
   if (!_db || !syncCode) return;
   if (applyingRemote && !force) return;
   if (!syncEnabled && !force) return;
-  lastPushedT = Date.now() + '_' + Math.floor(Math.random() * 1e6);
-  try { _db.ref('families/' + syncCode + '/state').set({ _t: lastPushedT, data: JSON.stringify(S) }); } catch (e) {}
+  const sh = _sharedBlob();
+  if (force || sh !== _lastSharedData) {
+    _lastSharedData = sh;
+    const t = _tok(); _lastPushed.shared = t;
+    try { _db.ref('families/' + syncCode + '/shared').set({ _t: t, data: sh }); } catch (e) {}
+  }
+  const cds = S.cdata || [];
+  for (let i = 0; i < cds.length; i++) {
+    const blob = JSON.stringify(cds[i]);
+    if (force || blob !== _lastChildData[i]) {
+      _lastChildData[i] = blob;
+      const t = _tok(); _lastPushed.child[i] = t;
+      try { _db.ref('families/' + syncCode + '/kids/' + i).set({ _t: t, data: blob }); } catch (e) {}
+    }
+  }
 }
 
 function newFamily() {
@@ -1366,95 +1403,55 @@ const ACCESSORIES = [
   { id:'acc_glasses', emoji:'🕶️', name:'Okulary', price:40 },
   { id:'acc_grad', emoji:'🎓', name:'Biret', price:50 },
   { id:'acc_crown', emoji:'👑', name:'Korona', price:90 },
+  { id:'acc_beanie', emoji:'🧶', name:'Czapka zimowa', price:35 },
+  { id:'acc_sunhat', emoji:'👒', name:'Kapelusz letni', price:35 },
+  { id:'acc_party', emoji:'🥳', name:'Czapeczka', price:30 },
+  { id:'acc_headphones', emoji:'🎧', name:'Słuchawki', price:45 },
+  { id:'acc_wreath', emoji:'🌷', name:'Wianek', price:40 },
 ];
 const FURNITURE = [
-  // ── ŚCIENNE ──
-  { id:'fur_balloon',     emoji:'🎈', name:'Balon',              price:15,  zone:'wall' },
-  { id:'fur_picture',     emoji:'🖼️', name:'Obraz',              price:25,  zone:'wall' },
-  { id:'fur_clock',       emoji:'🕐', name:'Zegar ścienny',      price:25,  zone:'wall' },
-  { id:'fur_window',      emoji:'🪟', name:'Okno',               price:30,  zone:'wall' },
-  { id:'fur_trophy',      emoji:'🏆', name:'Puchar',             price:40,  zone:'wall' },
-  { id:'fur_rainbow',     emoji:'🌈', name:'Tęcza',              price:18,  zone:'wall' },
-  { id:'fur_star_deco',   emoji:'⭐', name:'Gwiazdka dekor.',    price:20,  zone:'wall' },
-  { id:'fur_cloud',       emoji:'☁️', name:'Chmurka',            price:22,  zone:'wall' },
-  { id:'fur_moon',        emoji:'🌙', name:'Księżyc',            price:25,  zone:'wall' },
-  { id:'fur_sun_deco',    emoji:'☀️', name:'Słońce dekor.',      price:25,  zone:'wall' },
-  { id:'fur_flag',        emoji:'🚩', name:'Flaga',              price:20,  zone:'wall' },
-  { id:'fur_medal',       emoji:'🥇', name:'Medal',              price:35,  zone:'wall' },
-  { id:'fur_certificate', emoji:'📜', name:'Dyplom',             price:40,  zone:'wall' },
-  { id:'fur_world_map',   emoji:'🗺️', name:'Mapa świata',        price:45,  zone:'wall' },
-  { id:'fur_lightbulb',   emoji:'💡', name:'Żarówka pomysłów',   price:30,  zone:'wall' },
-  { id:'fur_shelf',       emoji:'🪣', name:'Półka na ścianie',   price:28,  zone:'wall' },
-  { id:'fur_mirror_wall', emoji:'🪞', name:'Lustro ścienne',     price:35,  zone:'wall' },
-  { id:'fur_hook',        emoji:'🧥', name:'Wieszak ścienny',    price:18,  zone:'wall' },
-  // ── SYPIALNIA / POKÓJ ──
-  { id:'fur_bed',         emoji:'🛏️', name:'Łóżko',             price:50,  zone:'floor' },
-  { id:'fur_sofa',        emoji:'🛋️', name:'Kanapa',            price:45,  zone:'floor' },
-  { id:'fur_armchair',    emoji:'🪑', name:'Fotel',              price:38,  zone:'floor' },
-  { id:'fur_wardrobe',    emoji:'🗄️', name:'Szafa',              price:55,  zone:'floor' },
-  { id:'fur_dresser',     emoji:'🪟', name:'Komoda',             price:40,  zone:'floor' },
-  { id:'fur_nightstand',  emoji:'🕯️', name:'Szafka nocna',      price:25,  zone:'floor' },
-  { id:'fur_mirror',      emoji:'🪞', name:'Lustro stojące',     price:35,  zone:'floor' },
-  { id:'fur_lamp',        emoji:'💡', name:'Lampka podłogowa',   price:25,  zone:'floor' },
-  { id:'fur_lamp_desk',   emoji:'🔦', name:'Lampka biurkowa',    price:20,  zone:'floor' },
-  { id:'fur_teddy',       emoji:'🧸', name:'Miś',                price:25,  zone:'floor' },
-  { id:'fur_plant',       emoji:'🪴', name:'Roślinka',           price:20,  zone:'floor' },
-  { id:'fur_cactus',      emoji:'🌵', name:'Kaktus',             price:20,  zone:'floor' },
-  { id:'fur_flowers',     emoji:'💐', name:'Kwiaty w wazonie',   price:25,  zone:'floor' },
-  { id:'fur_carpet_rug',  emoji:'🟫', name:'Dywan',              price:30,  zone:'floor' },
-  { id:'fur_beanbag',     emoji:'🛖', name:'Pufa',               price:35,  zone:'floor' },
-  // ── BIURKO I NAUKA ──
-  { id:'fur_desk_plain',  emoji:'🖥️', name:'Biurko',             price:40,  zone:'floor' },
-  { id:'fur_desk_comp',   emoji:'💻', name:'Biurko z laptopem',  price:55,  zone:'floor' },
-  { id:'fur_chair_desk',  emoji:'🪑', name:'Krzesło biurowe',    price:30,  zone:'floor' },
-  { id:'fur_books',       emoji:'📚', name:'Półka z książkami',  price:30,  zone:'floor' },
-  { id:'fur_bookcase',    emoji:'🗃️', name:'Regał na książki',   price:45,  zone:'floor' },
-  { id:'fur_globe',       emoji:'🌍', name:'Globus',             price:35,  zone:'floor' },
-  { id:'fur_telescope',   emoji:'🔭', name:'Teleskop',           price:55,  zone:'floor' },
-  { id:'fur_microscope',  emoji:'🔬', name:'Mikroskop',          price:55,  zone:'floor' },
-  // ── SALON ──
-  { id:'fur_tv',          emoji:'📺', name:'Telewizor',          price:55,  zone:'floor' },
-  { id:'fur_tv_stand',    emoji:'📦', name:'Szafka RTV',         price:35,  zone:'floor' },
-  { id:'fur_console',     emoji:'🎮', name:'Konsola',            price:60,  zone:'floor' },
-  { id:'fur_coffee_table',emoji:'🫖', name:'Ławik kawowy',       price:30,  zone:'floor' },
-  { id:'fur_cabinet',     emoji:'🗄️', name:'Witryna / szafka',  price:45,  zone:'floor' },
-  // ── JADALNIA ──
-  { id:'fur_table_din',   emoji:'🍽️', name:'Stół jadalniany',   price:50,  zone:'floor' },
-  { id:'fur_chair_din',   emoji:'🪑', name:'Krzesło jadalniane', price:20,  zone:'floor' },
-  { id:'fur_highchair',   emoji:'🍼', name:'Krzesełko dla dziecka', price:25, zone:'floor' },
-  { id:'fur_sideboard',   emoji:'🗂️', name:'Kredens',            price:50,  zone:'floor' },
-  // ── KUCHNIA ──
-  { id:'fur_fridge',      emoji:'🧊', name:'Lodówka',            price:55,  zone:'floor' },
-  { id:'fur_stove',       emoji:'🍳', name:'Kuchenka',           price:50,  zone:'floor' },
-  { id:'fur_oven',        emoji:'🔥', name:'Piekarnik',          price:45,  zone:'floor' },
-  { id:'fur_microwave',   emoji:'📦', name:'Mikrofalówka',       price:35,  zone:'floor' },
-  { id:'fur_kettle',      emoji:'♨️', name:'Czajnik',            price:20,  zone:'floor' },
-  { id:'fur_toaster',     emoji:'🍞', name:'Toster',             price:20,  zone:'floor' },
-  { id:'fur_sink',        emoji:'🚿', name:'Zlewozmywak',        price:35,  zone:'floor' },
-  { id:'fur_kitchen_cab', emoji:'🗄️', name:'Szafka kuchenna',   price:35,  zone:'floor' },
-  { id:'fur_bar_stool',   emoji:'🧍', name:'Stołek barowy',      price:25,  zone:'floor' },
-  // ── MUZYKA I ZABAWA ──
-  { id:'fur_piano',       emoji:'🎹', name:'Pianino',            price:65,  zone:'floor' },
-  { id:'fur_guitar',      emoji:'🎸', name:'Gitara',             price:50,  zone:'floor' },
-  { id:'fur_drum',        emoji:'🥁', name:'Bębny',              price:60,  zone:'floor' },
-  { id:'fur_puzzle',      emoji:'🧩', name:'Puzzle',             price:25,  zone:'floor' },
-  { id:'fur_blocks',      emoji:'🧱', name:'Klocki LEGO',        price:30,  zone:'floor' },
-  { id:'fur_robot',       emoji:'🤖', name:'Robot',              price:70,  zone:'floor' },
-  { id:'fur_rocket',      emoji:'🚀', name:'Rakieta',            price:80,  zone:'floor' },
-  { id:'fur_dinosaur',    emoji:'🦕', name:'Dinozaur',           price:45,  zone:'floor' },
-  { id:'fur_football',    emoji:'⚽', name:'Piłka',              price:20,  zone:'floor' },
-  { id:'fur_basketball',  emoji:'🏀', name:'Kosz do koszykówki', price:40,  zone:'floor' },
-  { id:'fur_skateboard',  emoji:'🛹', name:'Deskorolka',         price:35,  zone:'floor' },
-  { id:'fur_bike',        emoji:'🚲', name:'Rowerek',            price:50,  zone:'floor' },
-  { id:'fur_aquarium',    emoji:'🐠', name:'Akwarium',           price:60,  zone:'floor' },
-  // ── MAGICZNE / DEKORACJE ──
-  { id:'fur_chest',       emoji:'🧳', name:'Skrzynia skarbów',   price:55,  zone:'floor' },
-  { id:'fur_potion',      emoji:'🧪', name:'Eliksir',            price:35,  zone:'floor' },
-  { id:'fur_magic_wand',  emoji:'🪄', name:'Różdżka',            price:40,  zone:'floor' },
-  { id:'fur_crystal_ball',emoji:'🔮', name:'Kryształowa kula',   price:50,  zone:'floor' },
-  { id:'fur_lantern',     emoji:'🏮', name:'Latarnia',           price:30,  zone:'floor' },
-  { id:'fur_mushroom',    emoji:'🍄', name:'Grzyb dekoracyjny',  price:22,  zone:'floor' },
-  { id:'fur_crown_stand', emoji:'👑', name:'Stojak na koronę',   price:65,  zone:'floor' },
+  { id:'fur_balloon', emoji:'🎈', name:'Balon', price:15, zone:'wall' },
+  { id:'fur_plant', emoji:'🪴', name:'Roślinka', price:20, zone:'floor' },
+  { id:'fur_chair', emoji:'🪑', name:'Krzesło', price:20, zone:'floor' },
+  { id:'fur_picture', emoji:'🖼️', name:'Obraz', price:25, zone:'wall' },
+  { id:'fur_clock', emoji:'🕐', name:'Zegar', price:25, zone:'wall' },
+  { id:'fur_lamp', emoji:'🕯️', name:'Lampka', price:25, zone:'floor' },
+  { id:'fur_teddy', emoji:'🧸', name:'Miś', price:25, zone:'floor' },
+  { id:'fur_window', emoji:'🪟', name:'Okno', price:30, zone:'wall' },
+  { id:'fur_books', emoji:'📚', name:'Książki', price:30, zone:'floor' },
+  { id:'fur_trophy', emoji:'🏆', name:'Puchar', price:40, zone:'wall' },
+  { id:'fur_sofa', emoji:'🛋️', name:'Kanapa', price:45, zone:'floor' },
+  { id:'fur_bed', emoji:'🛏️', name:'Łóżko', price:50, zone:'floor' },
+  { id:'fur_tv', emoji:'📺', name:'Telewizor', price:55, zone:'floor' },
+  { id:'fur_console', emoji:'🎮', name:'Konsola', price:60, zone:'floor' },
+  { id:'fur_wardrobe', emoji:'🚪', name:'Szafa', price:55, zone:'floor' },
+  { id:'fur_dresser', emoji:'🗄️', name:'Komoda', price:45, zone:'floor' },
+  { id:'fur_desk', emoji:'🖥️', name:'Biurko', price:55, zone:'floor' },
+  { id:'fur_laptop', emoji:'💻', name:'Laptop', price:40, zone:'floor' },
+  { id:'fur_armchair', emoji:'💺', name:'Fotel', price:45, zone:'floor' },
+  { id:'fur_desklamp', emoji:'💡', name:'Lampka biurkowa', price:25, zone:'floor' },
+  { id:'fur_table', emoji:'🍽️', name:'Stół', price:45, zone:'floor' },
+  { id:'fur_stove', emoji:'🍳', name:'Kuchenka', price:45, zone:'floor' },
+  { id:'fur_sink', emoji:'🚰', name:'Zlew', price:35, zone:'floor' },
+  { id:'fur_fridge', emoji:'🧊', name:'Lodówka', price:55, zone:'floor' },
+  { id:'fur_bath', emoji:'🛁', name:'Wanna', price:50, zone:'floor' },
+  { id:'fur_toilet', emoji:'🚽', name:'Toaleta', price:35, zone:'floor' },
+  { id:'fur_cactus', emoji:'🌵', name:'Kaktus', price:20, zone:'floor' },
+  { id:'fur_sunflower', emoji:'🌻', name:'Słonecznik', price:20, zone:'floor' },
+  { id:'fur_printer', emoji:'🖨️', name:'Drukarka', price:30, zone:'floor' },
+  { id:'fur_radio', emoji:'📻', name:'Radio', price:30, zone:'floor' },
+  { id:'fur_guitar', emoji:'🎸', name:'Gitara', price:40, zone:'floor' },
+  { id:'fur_piano', emoji:'🎹', name:'Pianino', price:70, zone:'floor' },
+  { id:'fur_drum', emoji:'🥁', name:'Bębenek', price:35, zone:'floor' },
+  { id:'fur_bike', emoji:'🚲', name:'Rowerek', price:45, zone:'floor' },
+  { id:'fur_car', emoji:'🚗', name:'Autko', price:60, zone:'floor' },
+  { id:'fur_toolbox', emoji:'🧰', name:'Skrzynka', price:25, zone:'floor' },
+  { id:'fur_globe', emoji:'🌍', name:'Globus', price:30, zone:'floor' },
+  { id:'fur_gift', emoji:'🎁', name:'Prezent', price:20, zone:'floor' },
+  { id:'fur_basket', emoji:'🧺', name:'Koszyk', price:25, zone:'floor' },
+  { id:'fur_ball', emoji:'⚽', name:'Piłka', price:20, zone:'floor' },
+  { id:'fur_mirror', emoji:'🪞', name:'Lustro', price:35, zone:'wall' },
+  { id:'fur_shower', emoji:'🚿', name:'Prysznic', price:40, zone:'wall' },
 ];
 const WALLS = [
   { id:'wall_sky', name:'Błękit', color:'#CDEBFB', price:0 },
@@ -1476,77 +1473,35 @@ const ROOMS = [
   { id:'room_poddasze', name:'Poddasze', emoji:'🪜', price:100 },
 ];
 const FUR_SIZE = {
-  // Ścienne
   fur_sofa: 6.4, fur_bed: 6.6, fur_tv: 4.8, fur_console: 3.6,
+  fur_chair: 4.2, fur_plant: 3.8, fur_books: 3.4, fur_teddy: 3.6, fur_lamp: 3.6,
   fur_window: 4.4, fur_picture: 3.8, fur_trophy: 3.2, fur_clock: 3.0, fur_balloon: 3.8,
-  fur_rainbow: 5.0, fur_star_deco: 3.2, fur_cloud: 4.2, fur_moon: 3.4, fur_sun_deco: 3.4,
-  fur_flag: 3.0, fur_medal: 2.8, fur_certificate: 3.8, fur_world_map: 5.0, fur_lightbulb: 3.0,
-  fur_shelf: 4.0, fur_mirror_wall: 3.6, fur_hook: 2.8,
-  // Sypialnia / pokój
-  fur_armchair: 4.6, fur_wardrobe: 5.8, fur_dresser: 4.8, fur_nightstand: 3.4,
-  fur_mirror: 4.0, fur_lamp: 3.6, fur_lamp_desk: 2.8, fur_teddy: 3.6,
-  fur_plant: 3.8, fur_cactus: 3.2, fur_flowers: 3.2, fur_carpet_rug: 5.0, fur_beanbag: 4.0,
-  // Biurko i nauka
-  fur_desk_plain: 5.2, fur_desk_comp: 5.4, fur_chair_desk: 4.0,
-  fur_books: 3.4, fur_bookcase: 5.0, fur_globe: 3.4, fur_telescope: 4.0, fur_microscope: 3.6,
-  // Salon
-  fur_tv_stand: 4.6, fur_coffee_table: 4.4, fur_cabinet: 4.8,
-  // Jadalnia
-  fur_table_din: 5.6, fur_chair_din: 4.0, fur_highchair: 3.6, fur_sideboard: 5.0,
-  // Kuchnia
-  fur_fridge: 4.8, fur_stove: 5.0, fur_oven: 4.4, fur_microwave: 3.2,
-  fur_kettle: 2.6, fur_toaster: 2.8, fur_sink: 4.6, fur_kitchen_cab: 4.8, fur_bar_stool: 3.6,
-  // Muzyka i zabawa
-  fur_piano: 6.0, fur_guitar: 3.8, fur_drum: 4.4,
-  fur_puzzle: 4.0, fur_blocks: 4.2, fur_robot: 3.8, fur_rocket: 4.2, fur_dinosaur: 5.0,
-  fur_football: 3.0, fur_basketball: 4.2, fur_skateboard: 3.8, fur_bike: 4.8, fur_aquarium: 5.2,
-  // Magiczne / dekoracje
-  fur_chest: 4.2, fur_potion: 2.8, fur_magic_wand: 3.2, fur_crystal_ball: 3.4,
-  fur_lantern: 3.4, fur_mushroom: 3.0, fur_crown_stand: 3.6,
+  fur_wardrobe: 6.0, fur_dresser: 4.6, fur_desk: 5.0, fur_laptop: 3.0, fur_armchair: 4.6,
+  fur_desklamp: 3.0, fur_table: 4.8, fur_stove: 4.0, fur_sink: 3.6, fur_fridge: 5.6,
+  fur_bath: 5.2, fur_toilet: 3.8, fur_cactus: 3.2, fur_sunflower: 3.4, fur_printer: 3.2,
+  fur_radio: 3.2, fur_guitar: 4.0, fur_piano: 5.6, fur_drum: 3.4, fur_bike: 4.6,
+  fur_car: 4.8, fur_toolbox: 3.0, fur_globe: 3.4, fur_gift: 3.0, fur_basket: 3.2,
+  fur_ball: 3.0, fur_mirror: 4.2, fur_shower: 4.2
 };
 function furSize(id) { return FUR_SIZE[id] || 2.6; }
 const DEFAULT_WALL = { room_salon:'wall_peach', room_sypialnia:'wall_lav', room_kuchnia:'wall_yellow', room_ogrod:'wall_green', room_garaz:'wall_gray', room_piwnica:'wall_gray', room_poddasze:'wall_mint' };
 const ROOM_DEFAULTS = {
-  room_salon:    [{id:'fur_sofa',x:.28,y:.80},{id:'fur_tv',x:.70,y:.80},{id:'fur_tv_stand',x:.70,y:.88},{id:'fur_picture',x:.50,y:.26},{id:'fur_plant',x:.88,y:.74},{id:'fur_coffee_table',x:.48,y:.86}],
-  room_sypialnia:[{id:'fur_bed',x:.30,y:.80},{id:'fur_lamp',x:.72,y:.76},{id:'fur_wardrobe',x:.82,y:.78},{id:'fur_nightstand',x:.52,y:.82},{id:'fur_picture',x:.50,y:.25},{id:'fur_teddy',x:.14,y:.85}],
-  room_kuchnia:  [{id:'fur_stove',x:.22,y:.80},{id:'fur_fridge',x:.78,y:.78},{id:'fur_sink',x:.50,y:.80},{id:'fur_kitchen_cab',x:.14,y:.78},{id:'fur_clock',x:.50,y:.24},{id:'fur_bar_stool',x:.65,y:.83}],
-  room_ogrod:    [{id:'fur_plant',x:.18,y:.80},{id:'fur_balloon',x:.55,y:.28},{id:'fur_armchair',x:.72,y:.80},{id:'fur_flowers',x:.88,y:.82},{id:'fur_rainbow',x:.50,y:.18}],
-  room_garaz:    [{id:'fur_console',x:.28,y:.82},{id:'fur_tv',x:.64,y:.80},{id:'fur_tv_stand',x:.64,y:.88},{id:'fur_trophy',x:.50,y:.26},{id:'fur_clock',x:.86,y:.28},{id:'fur_skateboard',x:.14,y:.82}],
-  room_piwnica:  [{id:'fur_bookcase',x:.26,y:.78},{id:'fur_lamp',x:.72,y:.80},{id:'fur_clock',x:.52,y:.25},{id:'fur_chest',x:.14,y:.83},{id:'fur_potion',x:.85,y:.82}],
-  room_poddasze: [{id:'fur_books',x:.28,y:.82},{id:'fur_teddy',x:.62,y:.86},{id:'fur_lamp',x:.82,y:.76},{id:'fur_window',x:.50,y:.26},{id:'fur_telescope',x:.14,y:.78},{id:'fur_globe',x:.80,y:.82}],
+  room_salon:    [{id:'fur_sofa',x:.30,y:.80},{id:'fur_tv',x:.70,y:.80},{id:'fur_picture',x:.50,y:.26},{id:'fur_plant',x:.88,y:.74}],
+  room_sypialnia:[{id:'fur_bed',x:.32,y:.80},{id:'fur_lamp',x:.74,y:.78},{id:'fur_picture',x:.56,y:.25},{id:'fur_teddy',x:.50,y:.87}],
+  room_kuchnia:  [{id:'fur_chair',x:.30,y:.80},{id:'fur_clock',x:.52,y:.24},{id:'fur_window',x:.80,y:.32},{id:'fur_plant',x:.88,y:.80}],
+  room_ogrod:    [{id:'fur_plant',x:.22,y:.80},{id:'fur_balloon',x:.55,y:.30},{id:'fur_chair',x:.76,y:.80}],
+  room_garaz:    [{id:'fur_console',x:.30,y:.82},{id:'fur_tv',x:.68,y:.82},{id:'fur_trophy',x:.50,y:.26},{id:'fur_clock',x:.86,y:.28}],
+  room_piwnica:  [{id:'fur_books',x:.28,y:.80},{id:'fur_lamp',x:.72,y:.80},{id:'fur_clock',x:.52,y:.25}],
+  room_poddasze: [{id:'fur_books',x:.28,y:.80},{id:'fur_teddy',x:.64,y:.85},{id:'fur_lamp',x:.83,y:.76},{id:'fur_window',x:.50,y:.27}],
 };
 function shopItemById(id) {
   return [...ACCESSORIES, ...FURNITURE, ...WALLS, ...ROOMS].find(x => x.id === id) || null;
 }
 const SHOP_EN = {
   acc_bow:'bow', acc_flower:'flower', acc_star:'star', acc_cap:'cap', acc_hat:'top hat', acc_scarf:'scarf', acc_glasses:'sunglasses', acc_grad:'graduation cap', acc_crown:'crown',
-  // ścienne
-  fur_balloon:'balloon', fur_picture:'picture', fur_clock:'wall clock', fur_window:'window', fur_trophy:'trophy',
-  fur_rainbow:'rainbow', fur_star_deco:'star decoration', fur_cloud:'cloud', fur_moon:'moon', fur_sun_deco:'sun decoration',
-  fur_flag:'flag', fur_medal:'medal', fur_certificate:'certificate', fur_world_map:'world map', fur_lightbulb:'light bulb',
-  fur_shelf:'wall shelf', fur_mirror_wall:'wall mirror', fur_hook:'wall hook',
-  // sypialnia
-  fur_bed:'bed', fur_sofa:'sofa', fur_armchair:'armchair', fur_wardrobe:'wardrobe', fur_dresser:'dresser',
-  fur_nightstand:'nightstand', fur_mirror:'standing mirror', fur_lamp:'floor lamp', fur_lamp_desk:'desk lamp', fur_teddy:'teddy bear',
-  fur_plant:'plant', fur_cactus:'cactus', fur_flowers:'vase with flowers', fur_carpet_rug:'rug', fur_beanbag:'beanbag',
-  // biurko
-  fur_desk_plain:'desk', fur_desk_comp:'laptop desk', fur_chair_desk:'office chair',
-  fur_books:'bookshelf', fur_bookcase:'bookcase', fur_globe:'globe', fur_telescope:'telescope', fur_microscope:'microscope',
-  // salon
-  fur_tv:'TV', fur_tv_stand:'TV stand', fur_console:'console', fur_coffee_table:'coffee table', fur_cabinet:'display cabinet',
-  // jadalnia
-  fur_table_din:'dining table', fur_chair_din:'dining chair', fur_highchair:'high chair', fur_sideboard:'sideboard',
-  // kuchnia
-  fur_fridge:'fridge', fur_stove:'stove', fur_oven:'oven', fur_microwave:'microwave',
-  fur_kettle:'kettle', fur_toaster:'toaster', fur_sink:'kitchen sink', fur_kitchen_cab:'kitchen cabinet', fur_bar_stool:'bar stool',
-  // muzyka i zabawa
-  fur_piano:'piano', fur_guitar:'guitar', fur_drum:'drums',
-  fur_puzzle:'puzzle', fur_blocks:'LEGO blocks', fur_robot:'robot', fur_rocket:'rocket', fur_dinosaur:'dinosaur',
-  fur_football:'football', fur_basketball:'basketball hoop', fur_skateboard:'skateboard', fur_bike:'bicycle', fur_aquarium:'aquarium',
-  // magiczne
-  fur_chest:'treasure chest', fur_potion:'potion', fur_magic_wand:'magic wand', fur_crystal_ball:'crystal ball',
-  fur_lantern:'lantern', fur_mushroom:'mushroom', fur_crown_stand:'crown stand',
-  // ściany i pokoje
+  acc_beanie:'winter hat', acc_sunhat:'sun hat', acc_party:'party hat', acc_headphones:'headphones', acc_wreath:'flower wreath',
+  fur_balloon:'balloon', fur_plant:'plant', fur_chair:'chair', fur_picture:'picture', fur_clock:'clock', fur_lamp:'lamp', fur_teddy:'teddy bear', fur_window:'window', fur_books:'books', fur_trophy:'trophy', fur_sofa:'sofa', fur_bed:'bed', fur_tv:'TV', fur_console:'console',
+  fur_wardrobe:'wardrobe', fur_dresser:'dresser', fur_desk:'desk', fur_laptop:'laptop', fur_armchair:'armchair', fur_desklamp:'desk lamp', fur_table:'table', fur_stove:'stove', fur_sink:'sink', fur_fridge:'fridge', fur_bath:'bathtub', fur_toilet:'toilet', fur_cactus:'cactus', fur_sunflower:'sunflower', fur_printer:'printer', fur_radio:'radio', fur_guitar:'guitar', fur_piano:'piano', fur_drum:'drum', fur_bike:'bike', fur_car:'car', fur_toolbox:'toolbox', fur_globe:'globe', fur_gift:'gift', fur_basket:'basket', fur_ball:'ball', fur_mirror:'mirror', fur_shower:'shower',
   wall_sky:'blue', wall_mint:'mint', wall_pink:'pink', wall_lav:'lavender', wall_peach:'peach', wall_yellow:'yellow', wall_green:'green', wall_gray:'grey',
   room_salon:'living room', room_sypialnia:'bedroom', room_kuchnia:'kitchen', room_ogrod:'garden', room_garaz:'garage', room_piwnica:'basement', room_poddasze:'attic',
 };
@@ -1562,50 +1517,6 @@ const EGGS = {
   fur_tv: { emoji: '🎮', msg: 'Za telewizorem były ukryte monety!', coins: 12 },
   fur_clock: { emoji: '🐭', msg: 'W zegarze mieszkała myszka-skarbnik!', coins: 10 },
   fur_picture: { emoji: '🔑', msg: 'Za obrazem był ukryty kluczyk i monety!', coins: 15 },
-  // Meble domowe
-  fur_wardrobe: { emoji: '🧦', msg: 'W szafie za swetrami schowane były złote monety!', coins: 14 },
-  fur_dresser: { emoji: '💍', msg: 'W szufladzie komody leżał pierścionek i stos monet!', coins: 16 },
-  fur_nightstand: { emoji: '🌙', msg: 'Pod lampką nocną ukryta była moneta szczęścia!', coins: 10 },
-  fur_mirror: { emoji: '✨', msg: 'Lustro odbijało złote monety — magia!', coins: 14 },
-  fur_mirror_wall: { emoji: '🪄', msg: 'Za lustrem ściennym skrywał się skarb!', coins: 14 },
-  fur_armchair: { emoji: '🐈', msg: 'Kot schował monety pod poduszką fotela!', coins: 13 },
-  fur_bookcase: { emoji: '📖', msg: 'Za regałem była tajna skrytka ze skarbem!', coins: 18 },
-  fur_shelf: { emoji: '🕷️', msg: 'Pająk-skarbnik zostawił na półce złote monety!', coins: 11 },
-  fur_desk_plain: { emoji: '📝', msg: 'W szufladzie biurka była ukryta złota moneta!', coins: 12 },
-  fur_desk_comp: { emoji: '💾', msg: 'Za laptopem znalazłeś dysk ze skarbem!', coins: 15 },
-  fur_chair_desk: { emoji: '🪑', msg: 'Pod siedziskiem krzesła biurowego schowane były monety!', coins: 10 },
-  fur_coffee_table: { emoji: '☕', msg: 'Pod szklanym blatem ławika leżały złote monety!', coins: 11 },
-  fur_tv_stand: { emoji: '📺', msg: 'W szafce RTV ktoś zostawił skarb!', coins: 12 },
-  fur_cabinet: { emoji: '🏺', msg: 'W witrynie za figurką stały monety!', coins: 14 },
-  fur_sideboard: { emoji: '🍶', msg: 'W kredensie za starą zastawą były złote monety!', coins: 16 },
-  fur_table_din: { emoji: '🍽️', msg: 'Pod obrusem stołu były ukryte monety na obiad!', coins: 13 },
-  fur_fridge: { emoji: '🍦', msg: 'Za lodami w zamrażarce schowane były złote monety!', coins: 15 },
-  fur_stove: { emoji: '🍪', msg: 'W piekarniku zamiast ciastek były złote monety!', coins: 14 },
-  fur_sink: { emoji: '🐟', msg: 'W zlewozmywaku mieszkała złota rybka i spełniła życzenie!', coins: 16 },
-  fur_kitchen_cab: { emoji: '🫙', msg: 'W słoiku w szafce kuchennej były ukryte monety!', coins: 12 },
-  fur_lamp_desk: { emoji: '🦋', msg: 'Na lampce siedział motyl ze złotym pyłkiem!', coins: 10 },
-  // Muzyka i zabawa
-  fur_piano: { emoji: '🎵', msg: 'Pod klawiaturą pianina ukryte były złote nuty!', coins: 18 },
-  fur_guitar: { emoji: '🎶', msg: 'W struny gitary wpleciony był skarb!', coins: 15 },
-  fur_drum: { emoji: '🥁', msg: 'W środku bębna brzęczały złote monety!', coins: 16 },
-  fur_aquarium: { emoji: '🐠', msg: 'Rybka Nemo przyprowadziła skarb z dna oceanu!', coins: 20 },
-  fur_robot: { emoji: '🔋', msg: 'Robot miał w środku złotą baterię-monetę!', coins: 18 },
-  fur_rocket: { emoji: '🌟', msg: 'Rakieta wróciła z kosmosu ze gwiazdkowym skarbem!', coins: 25 },
-  fur_telescope: { emoji: '🪐', msg: 'Przez teleskop zobaczyłeś deszcz monet z nieba!', coins: 18 },
-  fur_microscope: { emoji: '🔬', msg: 'Pod mikroskopem odkryłeś supermałe, ale cenne monety!', coins: 16 },
-  fur_globe: { emoji: '🌍', msg: 'Globus się obrócił i wypadły z niego monety!', coins: 14 },
-  fur_puzzle: { emoji: '🧩', msg: 'Ostatni element puzzli to był złoty skarb!', coins: 12 },
-  fur_blocks: { emoji: '🧱', msg: 'W wieżyczce z klocków ukryta była złota kostka!', coins: 14 },
-  fur_chest: { emoji: '💰', msg: 'Skrzynia skarbów była pełna monet — jackpot!', coins: 30 },
-  fur_crystal_ball: { emoji: '🔮', msg: 'Kryształowa kula przepowiedziała Ci bogactwo!', coins: 22 },
-  fur_magic_wand: { emoji: '✨', msg: 'Różdżka zamieniła powietrze w złote monety!', coins: 20 },
-  fur_potion: { emoji: '🧪', msg: 'Eliksir zamieniał się w złoto — alchemia!', coins: 18 },
-  fur_basketball: { emoji: '🏀', msg: 'Piłka do kosza trafiła prosto w kosz monet!', coins: 15 },
-  fur_skateboard: { emoji: '🛹', msg: 'Pod deskorolką była ukryta moneta szczęścia!', coins: 12 },
-  fur_dinosaur: { emoji: '🦴', msg: 'Dinozaur miał w pysku pradawną złotą monetę!', coins: 20 },
-  fur_cactus: { emoji: '🌵', msg: 'Kaktus był jak skarbonka — w środku monety!', coins: 12 },
-  fur_lantern: { emoji: '🏮', msg: 'W latarni zamiast ognika był złoty skarb!', coins: 15 },
-  fur_crown_stand: { emoji: '👑', msg: 'Pod koroną króla leżały królewskie monety!', coins: 25 },
 };
 function findEgg(id) {
   const cd = S.cdata[ci];
@@ -1621,15 +1532,27 @@ function findEgg(id) {
   renderPetTab();
 }
 function petMoodState(cd) {
-  const all = allTasksFlat();
-  const total = all.length || 1;
-  const done = all.filter(t => (cd.tasks && cd.tasks[t.id]) || (cd.excused && cd.excused[t.id])).length;
-  const ratio = done / total;
-  if (cd.szlaban) return { s: 'sad', face: '😢', txt: 'Jest mi smutno... masz dziś szlaban. 😢' };
-  if (ratio >= 1) return { s: 'happy', face: '🥰', txt: 'Hurra! Wszystko zrobione — jestem przeszczęśliwy! 🎉' };
-  if (ratio < 0.5) return { s: 'sad', face: '🥺', txt: 'Zrób swoje obowiązki, a będę szczęśliwy... 🥺' };
-  return { s: 'ok', face: '🙂', txt: 'Idzie nieźle! Dokończ zadania 💪' };
+  if (cd.szlaban) return { s: 'sad', face: '😢', txt: 'Masz dziś szlaban... 😢' };
+  const h = new Date().getHours();
+  let period, msg;
+  if (h < 15) { period = 'morning'; msg = { sad: 'Zrób poranne rutyny (najlepiej do 10:00), a będę wesoły! 🌅', ok: 'Brawo! Poranne rutyny zrobione! 🎉' }; }
+  else if (h < 20) { period = 'afternoon'; msg = { sad: 'Czas na popołudniowe rutyny! ☀️', ok: 'Super! Popołudniowe rutyny zrobione! 🎉' }; }
+  else { period = 'evening'; msg = { sad: 'Wieczorne rutyny czekają 🌙', ok: 'Wszystko zrobione — dobranoc! 🌟' }; }
+  const list = (S.tasks && S.tasks[period]) || [];
+  if (list.length === 0) return { s: 'happy', face: '🥰', txt: 'Na razie nic do zrobienia 😊' };
+  const done = list.filter(t => (cd.tasks && cd.tasks[t.id]) || (cd.excused && cd.excused[t.id])).length;
+  if (done >= list.length) return { s: 'happy', face: '🥰', txt: msg.ok };
+  return { s: 'sad', face: '🥺', txt: msg.sad };
 }
+setInterval(function () {
+  try {
+    if (ci !== null && document.getElementById('screen-dashboard').classList.contains('active')) {
+      renderPet();
+      const pc = document.getElementById('content-pet');
+      if (pc && !pc.classList.contains('hidden')) renderRoom();
+    }
+  } catch (e) { }
+}, 60000);
 function pickSecondPet() {
   pendingChild = ci;
   pickMode = 'second';
@@ -1964,6 +1887,21 @@ function petTapEl(el, which) {
   else nm = cd.petType ? (cd.petName || (petById(cd.petType) || {}).name) : getPetStage(cd.xp || 0).name;
   showToast('💖 ' + nm + ' cię kocha!');
 }
+
+function refreshPetMood() {
+  if (ci === null) return;
+  const cd = S.cdata[ci]; if (!cd) return;
+  const mood = petMoodState(cd);
+  const heroType = (cd.petType && petById(cd.petType)) ? cd.petType : 'cat';
+  const hero = document.getElementById('pet-emoji');
+  if (hero && hero.innerHTML) hero.innerHTML = petSVG(heroType, mood.s, (cd.shop && cd.shop.worn) || [], 78);
+  const moodTxt = document.getElementById('pet-mood'); if (moodTxt) moodTxt.textContent = mood.txt;
+  const rp = document.getElementById('room-pet');
+  if (rp && rp.innerHTML) { ensureShop(cd); rp.innerHTML = petSVG(heroType, mood.s, (cd.shop.worn || []), 150); }
+  const rp2 = document.getElementById('room-pet2');
+  if (rp2 && rp2.innerHTML && cd.petType2 && petById(cd.petType2)) rp2.innerHTML = petSVG(cd.petType2, mood.s, [], 124);
+}
+if (typeof setInterval !== 'undefined') setInterval(refreshPetMood, 60000);
 
 function petTap() {
   const e = document.getElementById('pet-emoji');
